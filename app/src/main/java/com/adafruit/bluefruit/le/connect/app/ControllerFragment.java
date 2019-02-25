@@ -1048,6 +1048,14 @@ public class ControllerFragment extends ConnectedPeripheralFragment implements G
         buffer.put(data.getBytes());
         sendCrcData(buffer.array());
     }
+
+    @Override
+    public void onSendControllerSeekBarStatus(int tag, int progress) {
+        String data = "!B" + tag + progress;
+        ByteBuffer buffer = ByteBuffer.allocate(data.length()).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.put(data.getBytes());
+        sendCrcData(buffer.array());
+    }
     // endregion
 
     // region UartDataManagerListener

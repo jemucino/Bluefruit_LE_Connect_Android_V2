@@ -153,8 +153,10 @@ public class ControllerPadFragment extends Fragment {
         ProgressBar progressBar = view.findViewById(R.id.progressBar);
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
-                progressBar.setProgress(value);
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                progressBar.setProgress(progress);
+
+                mListener.onSendControllerSeekBarStatus(0, progress);
             }
 
             @Override
@@ -305,6 +307,7 @@ public class ControllerPadFragment extends Fragment {
     // region ControllerPadFragmentListener
     public interface ControllerPadFragmentListener {
         void onSendControllerPadButtonStatus(int tag, boolean isPressed);
+        void onSendControllerSeekBarStatus(int tag, int progress);
     }
     // endregion
 }
