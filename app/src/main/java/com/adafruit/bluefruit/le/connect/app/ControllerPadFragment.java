@@ -21,6 +21,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
+import android.widget.ProgressBar;
 
 import com.adafruit.bluefruit.le.connect.BluefruitApplication;
 import com.adafruit.bluefruit.le.connect.BuildConfig;
@@ -146,6 +148,25 @@ public class ControllerPadFragment extends Fragment {
         button3ImageButton.setOnTouchListener(mPadButtonTouchListener);
         ImageButton button4ImageButton = view.findViewById(R.id.button4ImageButton);
         button4ImageButton.setOnTouchListener(mPadButtonTouchListener);
+
+        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        ProgressBar progressBar = view.findViewById(R.id.progressBar);
+        seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int value, boolean fromUser) {
+                progressBar.setProgress(value);
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
 
         // Read shared preferences
         maxPacketsToPaintAsText = UartBaseFragment.kDefaultMaxPacketsToPaintAsText; //PreferencesFragment.getUartTextMaxPackets(this);

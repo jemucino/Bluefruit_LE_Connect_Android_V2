@@ -30,6 +30,12 @@
         android:layout_below="@id/bufferTextView"
         android:orientation="vertical">
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
         <View
             android:id="@+id/topSpacerView"
             android:layout_width="match_parent"
@@ -225,6 +231,12 @@
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>
+
+        <SeekBar
+            android:id="@+id/seekBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:tag="0" />
 
         <View
             android:id="@+id/bottomSpacerView"
