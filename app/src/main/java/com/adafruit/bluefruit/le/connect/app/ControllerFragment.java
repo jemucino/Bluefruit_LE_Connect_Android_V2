@@ -1050,10 +1050,11 @@ public class ControllerFragment extends ConnectedPeripheralFragment implements G
     }
 
     @Override
-    public void onSendControllerSeekBarStatus(int tag, int progress) {
-        String data = "!S" + tag + progress;
-        ByteBuffer buffer = ByteBuffer.allocate(data.length()).order(java.nio.ByteOrder.LITTLE_ENDIAN);
-        buffer.put(data.getBytes());
+    public void onSendControllerSeekBarStatus(int progress) {
+        String prefix = "!S";
+        ByteBuffer buffer = ByteBuffer.allocate(6).order(java.nio.ByteOrder.LITTLE_ENDIAN);
+        buffer.put(prefix.getBytes());
+        buffer.putInt(progress);
         sendCrcData(buffer.array());
     }
     // endregion

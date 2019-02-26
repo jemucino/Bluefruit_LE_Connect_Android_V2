@@ -51,6 +51,11 @@ public class ControllerPadFragment extends Fragment {
     };
     private boolean isUITimerRunning = false;
 
+    // SeekBar handler
+    private SeekBar seekBar;
+    private Handler sendSeekBarHandler = new Handler();
+    private final static int kSendDataInterval = 100;   // milliseconds
+
     // UI
     private ViewGroup mContentView;
     private EditText mBufferTextView;
@@ -149,14 +154,17 @@ public class ControllerPadFragment extends Fragment {
         ImageButton button4ImageButton = view.findViewById(R.id.button4ImageButton);
         button4ImageButton.setOnTouchListener(mPadButtonTouchListener);
 
-        SeekBar seekBar = view.findViewById(R.id.seekBar);
+//        SeekBar seekBar = view.findViewById(R.id.seekBar);
+        seekBar = view.findViewById(R.id.seekBar);
+        sendSeekBarHandler.postDelayed(mPeriodicallySendData, kSendDataInterval);
         ProgressBar progressBar = view.findViewById(R.id.progressBar);
+
         seekBar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 progressBar.setProgress(progress);
 
-                mListener.onSendControllerSeekBarStatus(0, progress);
+//                mListener.onSendControllerSeekBarStatus(0, progress);
             }
 
             @Override
@@ -208,6 +216,8 @@ public class ControllerPadFragment extends Fragment {
         // Refresh timer
         isUITimerRunning = true;
         mUIRefreshTimerHandler.postDelayed(mUIRefreshTimerRunnable, 0);
+
+        sendSeekBarHandler.postDelayed(mPeriodicallySendData, kSendDataInterval);
     }
 
     @Override
@@ -215,6 +225,7 @@ public class ControllerPadFragment extends Fragment {
         isUITimerRunning = false;
         mUIRefreshTimerHandler.removeCallbacksAndMessages(mUIRefreshTimerRunnable);
 
+        sendSeekBarHandler.removeCallbacksAndMessages(null);
         super.onPause();
     }
 
@@ -307,7 +318,19 @@ public class ControllerPadFragment extends Fragment {
     // region ControllerPadFragmentListener
     public interface ControllerPadFragmentListener {
         void onSendControllerPadButtonStatus(int tag, boolean isPressed);
-        void onSendControllerSeekBarStatus(int tag, int progress);
+        void onSendControllerSeekBarStatus(int progress);
     }
     // endregion
+
+    private Runnable mPeriodicallySendData = new Runnable() {
+        @Override
+        public void run() {
+            int progress = seekBar.getProgress();
+            mListener.onSendControllerSeekBarStatus(progress);
+
+            // rerun in kSendDataInterval milliseconds
+            sendSeekBarHandler.postDelayed(this, kSendDataInterval);
+        }
+    };
+
 }
